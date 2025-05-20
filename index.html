@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <canvas class="canvas" width="900" height="690" style="background-color: black"></canvas>
+  </body>
+
+  <script type="module">
+    import { worldMap } from "./world.js";
+    import { pacman } from "./pacmanPlayer.js";
+    import { initWorldBoundings } from "./collisions.js";
+    pacman.init();
+    initWorldBoundings();
+
+    const canvas = document.querySelector(".canvas");
+    const ctx = canvas.getContext("2d");
+    ctx.fillStyle = "blue";
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      worldMap.draw(ctx);
+      pacman.move();
+      pacman.draw(ctx);
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+  </script>
+</html>
