@@ -23,6 +23,13 @@ export const pacman = {
     down: true,
     up: true,
   },
+  teleportPlayer() {
+    if (this.x <= 0 - this.width) {
+      this.x = 900;
+    } else if (this.x >= 900 + this.width) {
+      this.x = 0 - this.width;
+    }
+  },
   init() {
     //debuggingCollision();
     this.pacmanImageOpenRight.src = "./pacmanOpenRight.PNG";
@@ -104,6 +111,7 @@ export const pacman = {
     this.resetAllowMovement();
   },
   draw(ctx) {
+    this.teleportPlayer();
     let imageToDraw;
     if (!this.open) {
       imageToDraw = this.pacmanClosed;
