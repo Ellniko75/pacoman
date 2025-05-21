@@ -1,8 +1,8 @@
-import { manageCollision } from "./collisions.js";
+import { manageCollisionWithFood, manageCollision } from "./collisions.js";
 
 export const pacman = {
   x: 30,
-  y: 80,
+  y: 30,
   speed: 1,
   width: 30,
   height: 30,
@@ -23,6 +23,7 @@ export const pacman = {
     down: true,
     up: true,
   },
+
   teleportPlayer() {
     if (this.x <= 0 - this.width) {
       this.x = 900;
@@ -73,6 +74,11 @@ export const pacman = {
       }
     });
   },
+  playEatingSound() {
+    const eatingSound = new Audio("./wakafull.mp3");
+    eatingSound.volume = 0.1;
+    eatingSound.play();
+  },
   resetAllowMovement() {
     this.allowMovement.right = true;
     this.allowMovement.down = true;
@@ -82,7 +88,7 @@ export const pacman = {
 
   move() {
     manageCollision(this.allowMovement);
-
+    manageCollisionWithFood();
     if (this.allowMovement.down && this.down) {
       this.currentMovement = "down";
     }
