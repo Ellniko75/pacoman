@@ -12,19 +12,19 @@
   <script type="module">
     import { worldMap } from "./world.js";
     import { pacman } from "./pacmanPlayer.js";
-    import { initWorldBoundings } from "./collisions.js";
-    pacman.init();
-    initWorldBoundings();
+    import { enemiesHandler } from "./enemies/enemiesHandler.js";
+    import { canvas, ctx } from "./canvas.js";
 
-    const canvas = document.querySelector(".canvas");
-    const ctx = canvas.getContext("2d");
+    pacman.init();
+    enemiesHandler.init();
+
     ctx.fillStyle = "blue";
     function animate() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-
       worldMap.draw(ctx);
       pacman.move();
-      pacman.draw(ctx);
+      pacman.draw();
+      enemiesHandler.draw();
       requestAnimationFrame(animate);
     }
 

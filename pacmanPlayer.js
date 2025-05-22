@@ -1,8 +1,9 @@
-import { manageCollisionWithFood, manageCollision } from "./collisions.js";
+import { manageCollisionWithFood, manageCollisionCheap } from "./collisions.js";
+import { ctx } from "./canvas.js";
 
 export const pacman = {
-  x: 30,
-  y: 30,
+  x: 390,
+  y: 90,
   speed: 1,
   width: 30,
   height: 30,
@@ -13,17 +14,16 @@ export const pacman = {
   pacmanClosed: document.createElement("img"),
   open: true,
   up: false,
-  right: true,
+  right: false,
   left: false,
   down: false,
-  currentMovement: "right",
+  currentMovement: "left",
   allowMovement: {
     right: true,
     left: true,
     down: true,
     up: true,
   },
-
   teleportPlayer() {
     if (this.x <= 0 - this.width) {
       this.x = 900;
@@ -73,6 +73,12 @@ export const pacman = {
           break;
       }
     });
+    document.addEventListener("keyup", (e) => {
+      this.left = false;
+      this.right = false;
+      this.up = false;
+      this.down = false;
+    });
   },
   playEatingSound() {
     const eatingSound = new Audio("./wakafull.mp3");
@@ -85,21 +91,23 @@ export const pacman = {
     this.allowMovement.up = true;
     this.allowMovement.left = true;
   },
-
   move() {
-    manageCollision(this.allowMovement);
-    manageCollisionWithFood();
-    if (this.allowMovement.down && this.down) {
-      this.currentMovement = "down";
-    }
-    if (this.allowMovement.up && this.up) {
-      this.currentMovement = "up";
-    }
-    if (this.allowMovement.right && this.right) {
-      this.currentMovement = "right";
-    }
-    if (this.allowMovement.left && this.left) {
-      this.currentMovement = "left";
+    //we only check for world collisions on whole numbers and allow for the movement to change
+    if (Number.isInteger(this.x / 30) && Number.isInteger(this.y / 30)) {
+      manageCollisionWithFood();
+      manageCollisionCheap(this);
+      if (this.allowMovement.down && this.down) {
+        this.currentMovement = "down";
+      }
+      if (this.allowMovement.up && this.up) {
+        this.currentMovement = "up";
+      }
+      if (this.allowMovement.right && this.right) {
+        this.currentMovement = "right";
+      }
+      if (this.allowMovement.left && this.left) {
+        this.currentMovement = "left";
+      }
     }
 
     if (this.currentMovement == "right" && this.allowMovement.right) {
@@ -116,7 +124,7 @@ export const pacman = {
     }
     this.resetAllowMovement();
   },
-  draw(ctx) {
+  draw() {
     this.teleportPlayer();
     let imageToDraw;
     if (!this.open) {

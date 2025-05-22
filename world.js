@@ -60,4 +60,10 @@ export const worldMap = {
       isFood: this.map[y][x] == 0,
     };
   },
+  //returns x and y position of item in the array map, and also the raw values of y and x
+  getItemPositionInArray(item) {
+    const itemY = item.y / item.height;
+    const itemX = item.x / item.width;
+    return [Math.floor(itemY), Math.floor(itemX), itemY, itemX];
+  },
 };
